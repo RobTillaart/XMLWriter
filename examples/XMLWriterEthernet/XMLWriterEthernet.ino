@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriterEthernet.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: demo XML writer for EthernetClient
 //    DATE: 2020-04-24
 //     URL: https://github.com/RobTillaart/XMLWriter
@@ -32,7 +32,7 @@ void HTTP_header(EthernetClient* cl, const char *contentType, bool keepAlive = f
   cl->print("Content-Type: ");
   cl->println( contentType  );
   cl->println("Connection: ");
-  cl->println(keepAlive ? "keep-alive":"close");
+  cl->println(keepAlive ? "keep-alive" : "close");
   cl->println("Refresh: ");
   cl->println(refresh);
   cl->println();
@@ -62,7 +62,7 @@ void setup()
 
   Serial.println(Ethernet.hardwareStatus());
   Serial.println(Ethernet.linkStatus());
-  
+
   if (Ethernet.linkStatus() == LinkOFF)
   {
     Serial.println("Cable is not connected.");
@@ -84,9 +84,9 @@ void loop()
   if (client)
   {
     Serial.print("\n<CONNECTION>\n  ");
-	// Serial.println(client.remoteIP());
-	// Serial.println(client.remotePort());
-	
+    // Serial.println(client.remoteIP());
+    // Serial.println(client.remotePort());
+
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     reqCnt = 0;
@@ -107,16 +107,17 @@ void loop()
         // so you can send a reply
         if (c == '\n' && currentLineIsBlank)
         {
-		  if (strstr(httpRequest, "1.xml"))
-		  {
+          if (strstr(httpRequest, "1.xml"))
+          {
+            uint32_t start = micros();
             // send a standard http response header
             HTTP_header(&client, "text/xml", true, 5);
             XMLWriter XML(&client);
-	   
+
             // XML body
             XML.header();
             XML.comment("XMLWriterTest.ino\nThis is a demo of a simple XML lib for Arduino", true);
-            
+
             // use of {} to get indentation that follows the XML (sort of)
             // it adds no code size, but improves readability a lot
             XML.tagOpen("Arduino", "42");
@@ -125,23 +126,26 @@ void loop()
               {
                 AnalogPorts(&XML, "before");
                 DigitalPorts(&XML);
-                AnalogPorts(&XML,"after");
+                AnalogPorts(&XML, "after");
               }
               XML.tagClose();
             }
             XML.tagClose();
-		    break;
-		  }
-		  if (strstr(httpRequest, "2.xml"))
-		  {
+            uint32_t stop = micros();
+            Serial.println(stop - start);
+            break;
+          }
+          if (strstr(httpRequest, "2.xml"))
+          {
+            uint32_t start = micros();
             // send a standard http response header
             HTTP_header(&client, "text/xml", true, 5);
             XMLWriter XML(&client);
-			
+
             // XML body
             XML.header();
             XML.comment("XMLWriterTest.ino\nThis is a demo of a simple XML lib for Arduino", true);
-          
+
             // use of {} to get indentation that follows the XML (sort of)
             // it adds no code size, but improves readability a lot
             XML.tagOpen("Arduino", "102");
@@ -151,10 +155,12 @@ void loop()
               DataTypes(&XML);
             }
             XML.tagClose();
-		    break;
-		  }
-		  
-		  // default page is simple HTML
+            uint32_t stop = micros();
+            Serial.println(stop - start);
+            break;
+          }
+
+          // default page is simple HTML
           // send a standard http response header
           HTTP_header(&client, "text/html", true, 5);
 
@@ -258,7 +264,7 @@ void DataTypes(XMLWriter* xw)
   xw->writeNode("HEX", 42, HEX);
   xw->writeNode("OCT", 42, OCT);
   xw->tagClose();
-  
+
   xw->comment("Testing dataTypes II");
   for (int i = 0; i < 3; i++)
   {

@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriterTest.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.4
+// VERSION: 0.1.5
 // PURPOSE: make a simple XML generating lib
 //    DATE: 2013-11-06
 //     URL: https://github.com/RobTillaart/XMLWriter
@@ -17,9 +17,12 @@ void setup()
 {
   Serial.begin(115200);
 
+  uint32_t start = micros();
+  XML.setConfig(0);  // comment this line to see difference
+
   XML.header();
   XML.comment("XMLWriterTest.ino\nThis is a demo of a simple XML lib for Arduino", true);
-
+  // XML.newLine(0);
   XML.tagOpen("Arduino", "42");
 
   XML.tagOpen("Ports");
@@ -33,6 +36,9 @@ void setup()
   DataTypes();
 
   XML.tagClose();
+  uint32_t stop = micros();
+  Serial.println(stop - start);
+  Serial.println("done...");
 }
 
 void Weather2()
@@ -70,8 +76,8 @@ void AnalogPorts(const char* name)
   XML.tagOpen("Analog", name);
   XML.writeNode("Analog0", itoa(analogRead(A0), buffer, 10));
   XML.writeNode("Analog1", analogRead(A1));
-  XML.writeNode("Analog2", (5.0*analogRead(A2))/1023);  // default nr decimals = 2
-  XML.writeNode("Analog3", (5.0*analogRead(A2))/1023, 3);
+  XML.writeNode("Analog2", (5.0 * analogRead(A2)) / 1023); // default nr decimals = 2
+  XML.writeNode("Analog3", (5.0 * analogRead(A2)) / 1023, 3);
   XML.tagClose();
 }
 
@@ -95,7 +101,7 @@ void DataTypes()
   XML.writeNode("HEX", 42, HEX);
   XML.writeNode("OCT", 42, OCT);
   XML.tagClose();
-  
+
   XML.comment("Testing dataTypes II");
   for (int i = 0; i < 3; i++)
   {

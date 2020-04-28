@@ -2,16 +2,14 @@
 //
 //    FILE: XMLWriter.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
-//
-// Released to the public domain
 //
 
 #include "Arduino.h"
 
-#define XMLWRITER_VERSION "0.2.0"
+#define XMLWRITER_VERSION "0.2.1"
 
 // for comment()
 #define NOMULTILINE false
@@ -34,8 +32,29 @@
 // reduce footprint by commenting next line
 #define XMLWRITER_ESCAPE_SUPPORT
 
+// configuration - setConfig
+#define XMLWRITER_NONE		0x00
+#define XMLWRITER_COMMENT	0x01
+#define XMLWRITER_INDENT	0x02
+#define XMLWRITER_NEWLINE	0x04
+
 // uncomment next line to reduce ~30bytes RAM in escape() function
 // #define __PROGMEM__
+
+// XMLWRITER_BUFSIZE should be at least 2 bytes...
+// Bigger buffer is mostly faster
+//
+// Indicative sizes	       (run your tests to find your application optimum)
+// STREAM		SIZE
+// --------------------
+// Ethernet		20-30
+// Serial       5
+// SD File		10-16
+#define XMLWRITER_BUFSIZE	20
+
+#if XMLWRITER_BUFSIZE < 2
+#error XMLWRITER_BUFSIZE should be at least 2
+#endif
 
 class XMLWriter : Print
 {
@@ -45,12 +64,19 @@ public:
 
   void reset();
 
+  // to show/strip comment, indent, newLine
+  // to minimize the output setConfig(0);
+  void setConfig(uint8_t cfg) { _config = cfg; };
+
   // standard XML header
   void header();
 
   // if multiline == true it does not indent to allow bigger text blocks
   // <!-- text -->
   void comment(const char* text, const bool multiLine = false);
+
+  // add a number of newlines to the output, default = 1.
+  void newLine(uint8_t n = 1);
 
   // <tag>
   void tagOpen(const char* tag, const bool newline = true);
@@ -70,6 +96,7 @@ public:
   void writeNode(const char* tag, const char* value);
 
   // typically 0,2,4; default == 2;
+  // multiple of 2;
   void setIndentSize(const uint8_t size = 2);
 
   // for manual layout control
@@ -101,19 +128,27 @@ public:
   void escape(const char* str);
 #endif
 
+  void flush();
+
 private:
   // outputstream, Print Class
-  Print* 			_stream;
-  size_t write(uint8_t c);
+  Print*   _stream;
+  size_t   write(uint8_t c);
 
   // for indentation
   uint8_t _indent;
   uint8_t _indentStep;
 
+  // configuration
+  uint8_t _config;
+
   // stack - used to remember the current tagname to create
   // automatic the right close tag.
-  uint8_t _idx;
-  char tagStack[XMLWRITER_MAXLEVEL][XMLWRITER_MAXTAGSIZE+1];
+  uint8_t _tidx;
+  char    _tagStack[XMLWRITER_MAXLEVEL][XMLWRITER_MAXTAGSIZE + 1];
+
+  char    _buffer[XMLWRITER_BUFSIZE];
+  uint8_t _bidx;
 };
 
 // -- END OF FILE --

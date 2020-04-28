@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriterDemo01.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.1
+// VERSION: 0.1.2
 // PURPOSE: XML writer demo
 //    DATE: 2016-03-16
 //     URL: https://github.com/RobTillaart/XMLWriter
@@ -19,7 +19,11 @@ void setup()
   float y = random(100) * 1.0;
   float r = random(100) * 1.0;
 
+  uint32_t start = micros();
   shoot(p, y, r);
+  uint32_t stop = micros();
+  Serial.println();
+  Serial.println(stop - start);
 }
 
 void shoot(float p, float y, float r)

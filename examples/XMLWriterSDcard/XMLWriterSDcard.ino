@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriterSDcard.ino.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: XML writing to SD card
 //    DATE: 2020-04-24
 //     URL: https://github.com/RobTillaart/XMLWriter
@@ -35,13 +35,19 @@ void setup()
     while(1);
   }
 
+  // remove file for proper timing
+  SD.remove("data.xml");
+  delay(1000);
+
+
+  uint32_t start = micros();
   File logfile = SD.open("data.xml", FILE_WRITE);
   if (!logfile)
   {
     Serial.println("Error: SD card failure");
     while(1);
   }
-  
+
   XMLWriter XML(&logfile);
   XML.header();
   XML.comment("XMLWriterSDcard.ino\nThis is a demo of a simple XML lib for Arduino", true);
@@ -53,6 +59,10 @@ void setup()
   XML.tagClose();
 
   logfile.close();
+
+  uint32_t stop = micros();
+  Serial.println();
+  Serial.println(stop - start);
   Serial.println("Done...");
 }
 

@@ -1,7 +1,7 @@
 //
 //    FILE: KMLWriterTest.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.2
+// VERSION: 0.1.3
 // PURPOSE: simple KML writer
 //    DATE: 2015-05-21
 //     URL: https://github.com/RobTillaart/XMLWriter
@@ -17,7 +17,11 @@ void setup()
 {
   Serial.begin(115200);
 
+  uint32_t start = micros();
   KMLTest();
+  uint32_t stop = micros();
+  Serial.println();
+  Serial.println(stop - start);
 }
 
 void loop()
