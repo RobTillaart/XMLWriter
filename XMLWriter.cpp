@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriter.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.1
+// VERSION: 0.2.2
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
 //
@@ -17,15 +17,23 @@
 // 0.1.8   2017-12-09 fix casting issue #83 (long -> int32_t);
 // 0.1.9   2017-12-09 add PROGMEM support for escape() strings
 // 0.2.0   2020-04-24 refactor, added examples, #pragma, print as base class
-// 0.2.1   2020-04-26 performance optimized, setconfig() + newLine() + flush() added
+// 0.2.1   2020-04-26 performance optimized, setconfig() + newLine() added
+// 0.2.2   2020-04-29 dynamic buffer size in constructor
 //
 
 #include <XMLWriter.h>
 
-XMLWriter::XMLWriter(Print* stream)
+XMLWriter::XMLWriter(Print* stream, uint8_t bufsize)
 {
+  _bufsize = constrain(bufsize, 2, 250);
+  _buffer = (char *) malloc(_bufsize);
   _stream = stream;
   reset();
+}
+
+XMLWriter::~XMLWriter()
+{
+  if (_buffer != NULL) free(_buffer);
 }
 
 void XMLWriter::reset()
@@ -35,6 +43,7 @@ void XMLWriter::reset()
   _tidx = 0;
   _bidx = 0;
   _config = XMLWRITER_COMMENT | XMLWRITER_INDENT | XMLWRITER_NEWLINE;
+  _bytesOut = 0;
 }
 
 void XMLWriter::header()
@@ -246,7 +255,8 @@ void XMLWriter::indent()
 {
   if (_config & XMLWRITER_INDENT)
   {
-    // as indentation is a multiple of 2 this is nice balance between speed and RAM.
+    // as indentation is a multiple of 2 
+	// this is nice balance between speed and RAM.
     for (uint8_t i = _indent; i > 0; i-= 2) print("  ");
   }
 }
@@ -254,18 +264,19 @@ void XMLWriter::indent()
 size_t XMLWriter::write(uint8_t c)
 {
   _buffer[_bidx++] = c;
-  if (c == '\n' || _bidx == (XMLWRITER_BUFSIZE - 1))
-  {
-    flush();
-  }
+  if (_bidx == (_bufsize - 1)) flush();
   return 1;
 };
 
 void XMLWriter::flush()
 {
-  _buffer[_bidx] = 0;
-  _stream->print(_buffer);
-  _bidx = 0;
+  _bytesOut += _bidx;
+  if (_bidx > 0)
+  {
+    _buffer[_bidx] = 0;
+    _stream->print(_buffer);
+    _bidx = 0;
+  }
 };
 
 

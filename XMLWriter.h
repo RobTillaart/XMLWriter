@@ -2,14 +2,14 @@
 //
 //    FILE: XMLWriter.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.1
+// VERSION: 0.2.2
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
 //
 
 #include "Arduino.h"
 
-#define XMLWRITER_VERSION "0.2.1"
+#define XMLWRITER_VERSION "0.2.2"
 
 // for comment()
 #define NOMULTILINE false
@@ -38,29 +38,16 @@
 #define XMLWRITER_INDENT	0x02
 #define XMLWRITER_NEWLINE	0x04
 
-// uncomment next line to reduce ~30bytes RAM in escape() function
+// uncomment next line to reduce ~30bytes RAM in escape()  (AVR oonly)
 // #define __PROGMEM__
 
-// XMLWRITER_BUFSIZE should be at least 2 bytes...
-// Bigger buffer is mostly faster
-//
-// Indicative sizes	       (run your tests to find your application optimum)
-// STREAM		SIZE
-// --------------------
-// Ethernet		20-30
-// Serial       5
-// SD File		10-16
-#define XMLWRITER_BUFSIZE	20
-
-#if XMLWRITER_BUFSIZE < 2
-#error XMLWRITER_BUFSIZE should be at least 2
-#endif
 
 class XMLWriter : Print
 {
 public:
   // default = Serial
-  XMLWriter(Print* stream = &Serial);
+  XMLWriter(Print* stream = &Serial, uint8_t bufsize = 10);
+  ~XMLWriter();
 
   void reset();
 
@@ -128,7 +115,13 @@ public:
   void escape(const char* str);
 #endif
 
-  void flush();
+  // One need to call flush() at the end of writing to empty 
+  // the internal buffer.
+  void     flush();
+  
+  // metrics
+  uint8_t  bufferIndex()  { return _bidx; };
+  uint32_t bytesWritten() { return _bytesOut; } ;
 
 private:
   // outputstream, Print Class
@@ -136,19 +129,21 @@ private:
   size_t   write(uint8_t c);
 
   // for indentation
-  uint8_t _indent;
-  uint8_t _indentStep;
+  uint8_t  _indent;
+  uint8_t  _indentStep;
 
   // configuration
-  uint8_t _config;
+  uint8_t  _config;
 
   // stack - used to remember the current tagname to create
   // automatic the right close tag.
-  uint8_t _tidx;
-  char    _tagStack[XMLWRITER_MAXLEVEL][XMLWRITER_MAXTAGSIZE + 1];
+  uint8_t  _tidx;
+  char     _tagStack[XMLWRITER_MAXLEVEL][XMLWRITER_MAXTAGSIZE + 1];
 
-  char    _buffer[XMLWRITER_BUFSIZE];
-  uint8_t _bidx;
+  char *   _buffer;
+  uint8_t  _bufsize;
+  uint8_t  _bidx;
+  uint32_t _bytesOut;
 };
 
 // -- END OF FILE --

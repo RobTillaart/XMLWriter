@@ -112,7 +112,7 @@ void loop()
             uint32_t start = micros();
             // send a standard http response header
             HTTP_header(&client, "text/xml", true, 5);
-            XMLWriter XML(&client);
+            XMLWriter XML(&client, 250);
 
             // XML body
             XML.header();
@@ -131,8 +131,11 @@ void loop()
               XML.tagClose();
             }
             XML.tagClose();
+            XML.flush();
             uint32_t stop = micros();
             Serial.println(stop - start);
+            Serial.println(XML.bytesWritten());
+            Serial.println(XML.bytesWritten() * 1e6 / (stop - start));
             break;
           }
           if (strstr(httpRequest, "2.xml"))
@@ -140,7 +143,7 @@ void loop()
             uint32_t start = micros();
             // send a standard http response header
             HTTP_header(&client, "text/xml", true, 5);
-            XMLWriter XML(&client);
+            XMLWriter XML(&client, 250);
 
             // XML body
             XML.header();
@@ -155,8 +158,11 @@ void loop()
               DataTypes(&XML);
             }
             XML.tagClose();
+            XML.flush();
             uint32_t stop = micros();
             Serial.println(stop - start);
+            Serial.println(XML.bytesWritten());
+            Serial.println(XML.bytesWritten() * 1e6 / (stop - start));
             break;
           }
 
