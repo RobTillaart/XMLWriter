@@ -26,8 +26,13 @@
 
 // deepness of XML tree 5..10
 // needed for stack of tagStack
+#ifndef XMLWRITER_MAXLEVEL
 #define XMLWRITER_MAXLEVEL 5      // adjust for deeper nested structures
-#define XMLWRITER_MAXTAGSIZE 15   // adjust for longer fields - !! eats memory !!
+#endif
+
+#ifndef XMLWRITER_MAXTAGSIZE
+#define XMLWRITER_MAXTAGSIZE 15 // adjust for longer fields - !! eats memory !!
+#endif
 
 // reduce footprint by commenting next line
 #define XMLWRITER_ESCAPE_SUPPORT
