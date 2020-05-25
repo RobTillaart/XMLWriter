@@ -57,6 +57,7 @@ void setup()
   DigitalPorts(&XML);
   XML.tagClose();
   XML.tagClose();
+  XML.flush();
 
   logfile.close();
 
