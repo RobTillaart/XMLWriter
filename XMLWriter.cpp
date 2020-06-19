@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriter.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.2
+// VERSION: 0.2.3
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
 //
@@ -19,6 +19,7 @@
 // 0.2.0   2020-04-24 refactor, added examples, #pragma, print as base class
 // 0.2.1   2020-04-26 performance optimized, setconfig() + newLine() added
 // 0.2.2   2020-04-29 dynamic buffer size in constructor
+// 0.2.3   2020-06-19 fix library.json
 //
 
 #include <XMLWriter.h>
