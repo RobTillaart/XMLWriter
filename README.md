@@ -78,28 +78,34 @@ Metrics (to optimize buffersize in combination with timing)
 - **bufferIndex()** returns the size of the internal buffer
 - **bytesWritten()** idem, since reset().
 
-XMLWriter implements the print interface, so at any moment one can use print()
-or println() to inject specific information. 
-**tagField()** and **writeNode()** do not support 64 bit integer types and 
-large values of double. 
-Check my printHelpers library for conversion of these to string formats 
-e.g. scientific or engineering notation.
+## Print interface
+
+XMLWriter 0.2.4 implements the Print interface, so at any moment one can use 
+**print()** or **println()** to inject specific information. 
+E.g. Note that **tagField()** and **writeNode()** do not support 64 bit integer
+types and large values of double. 
+My **printHelpers library** helps to convert these to strings which can be printed.
+See example.
+
+The Print interface can also be used to print objects that 
+implement the **Printable** interface. See example.
+
+With the support of the Print interface, **raw()** is becoming obsolete as it only
+can inject strings.
 
 ## Configuration flags
 
-| Flag | Value |
-|----|----|
-|XMLWRITER_NONE    | 0x00 |
-|XMLWRITER_COMMENT | 0x01 |
-|XMLWRITER_INDENT  | 0x02 |
-|XMLWRITER_NEWLINE | 0x04 |
+| Flag | Value | Meaning |
+|:----|:----|:----|
+|XMLWRITER_NONE    | 0x00 | minimize output, smaller & faster |
+|XMLWRITER_COMMENT | 0x01 | allow comments |
+|XMLWRITER_INDENT  | 0x02 | allow indentation |
+|XMLWRITER_NEWLINE | 0x04 | allow newlines |
 
 - **setConfig(XMLWRITER_NONE);** to minimize the output in bytes.
 - **setConfig(XMLWRITER_NEWLINE);** to break an XML stream in lines.
 - **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT);** to see XML structure.
 - **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT | XMLWRITER_COMMENT);** to see XML structure + comments.
-
-
 
 ## Operation
 
