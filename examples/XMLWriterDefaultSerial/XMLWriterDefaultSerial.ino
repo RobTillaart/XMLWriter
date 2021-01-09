@@ -68,6 +68,7 @@ void Weather()
   XML.tagClose();
 }
 
+// casting to keep some compilers happy
 void AnalogPorts(const char* name)
 {
   XML.comment("The analog ports are multiplexed");
@@ -76,11 +77,11 @@ void AnalogPorts(const char* name)
   XML.writeNode("Analog1", (uint16_t) analogRead(A1));
   // default nr decimals = 2
   XML.writeNode("Analog2", (double) (5.0 * analogRead(A2)) / 1023); 
-  // lots of casting to keep some compilers happy
   XML.writeNode("Analog3", (double) (5.0 * analogRead(A3)) / 1023, (uint8_t)3);  
   XML.tagClose();
 }
 
+// casting to keep some compilers happy
 void DigitalPorts()
 {
   XML.comment("The digital ports are not multiplexed");

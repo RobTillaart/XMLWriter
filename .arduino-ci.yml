@@ -5,3 +5,8 @@ compile:
     - leonardo
     - due
     - zero
+  libraries:
+    - "Ethernet"
+    - "SD"
+    #- "printHelpers"
+    - "Complex"
