@@ -74,8 +74,10 @@ void AnalogPorts(const char* name)
   XML.tagOpen("Analog", name);
   XML.writeNode("Analog0", itoa(analogRead(A0), buffer, 10));
   XML.writeNode("Analog1", (uint16_t) analogRead(A1));
-  XML.writeNode("Analog2", (double) (5.0 * analogRead(A2)) / 1023); // default nr decimals = 2
-  XML.writeNode("Analog3", (double) (5.0 * analogRead(A3)) / 1023, 3);
+  // default nr decimals = 2
+  XML.writeNode("Analog2", (double) (5.0 * analogRead(A2)) / 1023); 
+  // lots of casting to keep some compilers happy
+  XML.writeNode("Analog3", (double) (5.0 * analogRead(A3)) / 1023, (uint8_t)3);  
   XML.tagClose();
 }
 
