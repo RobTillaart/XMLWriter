@@ -1,3 +1,9 @@
+
+[![Arduino CI](https://github.com/RobTillaart/XMLWriter/workflows/Arduino%20CI/badge.svg)](https://github.com/marketplace/actions/arduino_ci)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/XMLWriter/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/RobTillaart/XMLWriter.svg?maxAge=3600)](https://github.com/RobTillaart/XMLWriter/releases)
+
+
 # XMLWriter
 
 Arduino Library to create simple XML (messages, files, print, ...)
@@ -28,55 +34,68 @@ Run your tests to find your application optimum.
 **Important** When using buffering you should always include a call to **XML.flush()** 
 at the end of the XML generation. This will flush the last bytes in the internal buffer.
 
+
 ## Interface
 
-Constructor
+### Constructor
+
 - **XMLWriter(stream, bufsize);** Constructor defines the stream and the buffersize
 to optimize performance vs memory usage.
 
 
-Functions for manual layout control
+### Functions for anual layout control
+
 - **setIndentSize(size = 2);**  preferred a multiple of 2;
-- **incrIndent()**
-- **decrIndent()**
-- **indent();**
+- **incrIndent()** idem
+- **decrIndent()** idem
+- **indent()** idem
 - **raw(str)** inject any string
 
-General settings
+
+### General settings
+
 - **setConfig(cfg)** used to show/strip comment, indent, newLine. 
 use **setConfig(0);** to minimize the output
 - **newLine(n)** add a number of newlines to the output, default = 1
 
-----
 
-Functions
+### Functions
+
 - **reset()** resets internal state, to be called before new XML is written
 - **Header()** injects standard XML header string, must be first line
 - **comment(text, multiline)** \<!-- text --\>  
 if multiline == true it does not indent to allow bigger text blocks
 - **flush()** call flush() at the end of writing to empty the internal buffer. **!!**
 
-Functions to create simple tags with named fields
+
+### Functions to create simple tags with named fields
+
 - **tagOpen(tag, newLine)** \<tag\>
 - **tagOpen(tag, name, newLine)** \<tag name="name"\>
 - **tagCLose()** \</tag\>
 
-Functions to make up tags with multiple fields:
+
+### Functions to make up tags with multiple fields
+
 - **tagStart(tag)**  \<tag 
 - **tagField(field, string);**  field="string"
-- **tagField(field, T value, base = DEC);** standard math types
+- **tagField(field, T value, base = DEC);** standard math types,  field="value"
 - **tagEnd(newline = true, addSlash = true);**  /\>
 
-Functions to make a node
+### Functions to make a node
+
 - **writeNode(tag, value);** \<tag\>value\</tag\>
 - **writeNode(tag, T value, base = DEC);** standard math types
 
-Helper 
+### Helper 
+
 - **escape(str)** expands the xml chars: \"\'\<\>\&
 
-Metrics (to optimize buffersize in combination with timing)
+### Metrics (to optimize buffersize in combination with timing)
+
 - **bufferIndex()** returns the size of the internal buffer
 - **bytesWritten()** idem, since reset().
+
 
 ## Print interface
 

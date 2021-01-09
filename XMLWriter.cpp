@@ -1,28 +1,31 @@
 //
 //    FILE: XMLWriter.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.4
+// VERSION: 0.2.5
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
 //
-// HISTORY:
-// 0.1.00  2013-11-06 initial version
-// 0.1.01  2013-11-07 rework interfaces
-// 0.1.02  2013-11-07 +setIndentSize(), corrected history, +escape support
-// 0.1.03  2015-03-07 refactored - footprint + interface
-// 0.1.04  2015-05-21 refactored - reduce RAM -> used F() macro etc.
-// 0.1.05  2015-05-23 added XMLWRITER_MAXTAGSIZE 15 (to support KML coordinates tag)
-// 0.1.6   2016-03-16 added incrIndent(), decrIndent(), indent(), raw();
-// 0.1.7   2017-07-26 added const where possible
-// 0.1.8   2017-12-09 fix casting issue #83 (long -> int32_t);
-// 0.1.9   2017-12-09 add PROGMEM support for escape() strings
-// 0.2.0   2020-04-24 refactor, added examples, #pragma, print as base class
-// 0.2.1   2020-04-26 performance optimized, setconfig() + newLine() added
-// 0.2.2   2020-04-29 dynamic buffer size in constructor
-// 0.2.3   2020-06-19 fix library.json
-// 0.2.4   2020-07-07 fix #6 Print interface made public
+//  HISTORY:
+//  0.1.00 2013-11-06  initial version
+//  0.1.01 2013-11-07  rework interfaces
+//  0.1.02 2013-11-07  +setIndentSize(), corrected history, +escape support
+//  0.1.03 2015-03-07  refactored - footprint + interface
+//  0.1.04 2015-05-21  refactored - reduce RAM -> used F() macro etc.
+//  0.1.05 2015-05-23  added XMLWRITER_MAXTAGSIZE 15 (to support KML coordinates tag)
+//  0.1.6  2016-03-16  added incrIndent(), decrIndent(), indent(), raw();
+//  0.1.7  2017-07-26  added const where possible
+//  0.1.8  2017-12-09  fix casting issue #83 (long -> int32_t);
+//  0.1.9  2017-12-09  add PROGMEM support for escape() strings
+//  0.2.0  2020-04-24  refactor, added examples, #pragma, print as base class
+//  0.2.1  2020-04-26  performance optimized, setconfig() + newLine() added
+//  0.2.2  2020-04-29  dynamic buffer size in constructor
+//  0.2.3  2020-06-19  fix library.json
+//  0.2.4  2020-07-07  fix #6 Print interface made public
+//  0.2.5  2021-01-09  arduino-ci + unit tests
 
-#include <XMLWriter.h>
+
+#include "XMLWriter.h"
+
 
 XMLWriter::XMLWriter(Print* stream, uint8_t bufsize)
 {
