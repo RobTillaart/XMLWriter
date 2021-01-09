@@ -206,9 +206,9 @@ void XMLWriter::tagField(const char *field, const int16_t value, const uint8_t b
   tagField(field, (int32_t) value, base);
 }
 
-void XMLWriter::tagField(const char *field, const int value, const uint8_t base)
+void XMLWriter::tagField(const char *field, const int value, const int base)
 {
-  tagField(field, (int32_t) value, base);
+  tagField(field, (int32_t) value, (uint8_t) base);
 }
 
 void XMLWriter::tagField(const char *field, const int32_t value, const uint8_t base)
@@ -268,9 +268,9 @@ void XMLWriter::writeNode(const char* tag, const int16_t value, const uint8_t ba
   writeNode(tag, (int32_t) value, base);
 }
 
-void XMLWriter::writeNode(const char* tag, const int value, const uint8_t base)
+void XMLWriter::writeNode(const char* tag, const int value, const int base)
 {
-  writeNode(tag, (int32_t) value, base);
+  writeNode(tag, (int32_t) value, (uint8_t) base);
 }
 
 void XMLWriter::writeNode(const char* tag, const int32_t value, const uint8_t base)
