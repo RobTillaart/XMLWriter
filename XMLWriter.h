@@ -111,7 +111,7 @@ public:
   void tagField(const char* field, const int      value, const int base = DEC);
   void tagField(const char* field, const bool     value);
   void tagField(const char* field, const float    value, const uint8_t decimals = 2);
-  void tagField(const char* field, const double   value, const uint8_t decimals = 2);
+  void tagField(const char* field,  double   value, const uint8_t decimals = 2);
 
   void writeNode(const char* tag, const uint8_t   value, const uint8_t base = DEC);
   void writeNode(const char* tag, const uint16_t  value, const uint8_t base = DEC);
