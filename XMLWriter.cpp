@@ -173,6 +173,10 @@ void XMLWriter::setIndentSize(const uint8_t size)
   _indentStep = size;
 }
 
+///////////////////////////////////////////////////////////////
+//
+// TAGFIELD
+//
 void XMLWriter::tagField(const char *field, const uint8_t value, const uint8_t base)
 {
   tagField(field, (uint32_t) value, base);
@@ -198,6 +202,11 @@ void XMLWriter::tagField(const char *field, const int8_t value, const uint8_t ba
 }
 
 void XMLWriter::tagField(const char *field, const int16_t value, const uint8_t base)
+{
+  tagField(field, (int32_t) value, base);
+}
+
+void XMLWriter::tagField(const char *field, const int value, const uint8_t base)
 {
   tagField(field, (int32_t) value, base);
 }
@@ -228,6 +237,10 @@ void XMLWriter::tagField(const char *field, const double value, const uint8_t de
   print('"');
 }
 
+///////////////////////////////////////////////////////////////
+//
+// WRITENODE
+//
 void XMLWriter::writeNode(const char* tag, const uint8_t value, const uint8_t base)
 {
   writeNode(tag, (uint32_t) value, base);
@@ -251,6 +264,11 @@ void XMLWriter::writeNode(const char* tag, const int8_t value, const uint8_t bas
 }
 
 void XMLWriter::writeNode(const char* tag, const int16_t value, const uint8_t base)
+{
+  writeNode(tag, (int32_t) value, base);
+}
+
+void XMLWriter::writeNode(const char* tag, const int value, const uint8_t base)
 {
   writeNode(tag, (int32_t) value, base);
 }

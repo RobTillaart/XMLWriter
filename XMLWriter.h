@@ -108,6 +108,7 @@ public:
   void tagField(const char* field, const int8_t   value, const uint8_t base = DEC);
   void tagField(const char* field, const int16_t  value, const uint8_t base = DEC);
   void tagField(const char* field, const int32_t  value, const uint8_t base = DEC);
+  void tagField(const char* field, const int      value, const uint8_t base = DEC);
   void tagField(const char* field, const bool     value);
   void tagField(const char* field, const double   value, const uint8_t decimals = 2);
 
@@ -117,6 +118,7 @@ public:
   void writeNode(const char* tag, const int8_t    value, const uint8_t base = DEC);
   void writeNode(const char* tag, const int16_t   value, const uint8_t base = DEC);
   void writeNode(const char* tag, const int32_t   value, const uint8_t base = DEC);
+  void writeNode(const char* tag, const int       value, const uint8_t base = DEC);
   void writeNode(const char* tag, const bool      value);
   void writeNode(const char* tag, const double    value, const uint8_t decimals = 2);
 
