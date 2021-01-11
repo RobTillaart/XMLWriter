@@ -146,8 +146,8 @@ public:
 
 
   // One need to call flush() at the end of writing to empty the internal buffer.
-  // returns the number of bytes flushed.
-  uint8_t  flush();
+  // Note: this is overridden of the Print interface
+  void  flush();
 
 
   // metrics

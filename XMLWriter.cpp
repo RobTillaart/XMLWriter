@@ -317,7 +317,7 @@ void XMLWriter::indent()
   if (_config & XMLWRITER_INDENT)
   {
     // as indentation is a multiple of 2 
-	// this is nice balance between speed and RAM.
+    // this is nice balance between speed and RAM.
     for (uint8_t i = _indent; i > 0; i-= 2) print("  ");
   }
 }
@@ -329,9 +329,8 @@ size_t XMLWriter::write(uint8_t c)
   return 1;
 };
 
-uint8_t XMLWriter::flush()
+void XMLWriter::flush()
 {
-  uint8_t rv = _bidx;
   _bytesOut += _bidx;
   if (_bidx > 0)
   {
@@ -339,7 +338,6 @@ uint8_t XMLWriter::flush()
     _stream->print(_buffer);
     _bidx = 0;
   }
-  return rv;
 };
 
 

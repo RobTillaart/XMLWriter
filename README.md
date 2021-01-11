@@ -16,7 +16,7 @@ like Ethernet SD.File or Serial.
 When instantiating an XMLWriter one can define the internal buffer size.
 A bigger buffer will make the output faster, especially for Ethernet and SD.File.
 The buffer size should be at least 2 bytes and max 250.
-How much faster depends on the properties of the stream.
+How much faster depends on the properties of the stream and the platform used.
 E.g. the baudrate and internal buffer of Serial, packet behaviour of Ethernet,
 or paging of SD cards.
 If performance is low one should do testruns with different sizes for the buffer 
@@ -31,8 +31,8 @@ Run your tests to find your application optimum.
 | Serial   |  5 |
 | SD File  |  10-16 |
 
-**Important** When using buffering you should always include a call to **XML.flush()** 
-at the end of the XML generation. This will flush the last bytes in the internal buffer.
+**IMPORTANT:** When using buffering you should always call **XML.flush()** 
+at the end of the XML generation. This will flush the last bytes in the internal buffer into the output stream.
 
 
 ## Interface
@@ -43,12 +43,13 @@ at the end of the XML generation. This will flush the last bytes in the internal
 to optimize performance vs memory usage.
 
 
-### Functions for anual layout control
+### Functions for manual layout control
 
-- **setIndentSize(size = 2);**  preferred a multiple of 2;
-- **incrIndent()** idem
-- **decrIndent()** idem
-- **indent()** idem
+- **setIndentSize(size = 2)** preferred a multiple of 2; no limit
+- **getIndentSize()** returns set indent
+- **incrIndent()** increments indent by 2 spaces
+- **decrIndent()** decrements indent by 2 spaces
+- **indent()** manually indent output
 - **raw(str)** inject any string
 
 
@@ -61,10 +62,11 @@ use **setConfig(0);** to minimize the output
 
 ### Functions
 
+- **header()** injects standard XML header string, must be first line
 - **reset()** resets internal state, to be called before new XML is written
-- **Header()** injects standard XML header string, must be first line
 - **comment(text, multiline)** \<!-- text --\>  
 if multiline == true it does not indent to allow bigger text blocks
+multiline is default false.
 - **flush()** call flush() at the end of writing to empty the internal buffer. **!!**
 
 
@@ -72,7 +74,7 @@ if multiline == true it does not indent to allow bigger text blocks
 
 - **tagOpen(tag, newLine)** \<tag\>
 - **tagOpen(tag, name, newLine)** \<tag name="name"\>
-- **tagCLose()** \</tag\>
+- **tagClose()** \</tag\>
 
 
 ### Functions to make up tags with multiple fields
@@ -91,17 +93,23 @@ if multiline == true it does not indent to allow bigger text blocks
 
 - **escape(str)** expands the xml chars: \"\'\<\>\&
 
-### Metrics (to optimize buffersize in combination with timing)
+
+### Metrics and debug
+
+To optimize buffersize in combination with timing.
 
 - **bufferIndex()** returns the size of the internal buffer
 - **bytesWritten()** idem, since reset().
+- **version()** injects the XMLWRITER_VERSION as comment in outputstream.
+- **debug()** injects comment with internal info.
 
 
 ## Print interface
 
 XMLWriter 0.2.4 implements the Print interface, so at any moment one can use 
 **print()** or **println()** to inject specific information. 
-E.g. Note that **tagField()** and **writeNode()** do not support 64 bit integer
+
+Note that **tagField()** and **writeNode()** do not support 64 bit integer
 types and large values of double. 
 My **printHelpers library** helps to convert these to strings which can be printed.
 See example.
@@ -111,6 +119,7 @@ implement the **Printable** interface. See example.
 
 With the support of the Print interface, **raw()** is becoming obsolete as it only
 can inject strings.
+
 
 ## Configuration flags
 
@@ -125,6 +134,7 @@ can inject strings.
 - **setConfig(XMLWRITER_NEWLINE);** to break an XML stream in lines.
 - **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT);** to see XML structure.
 - **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT | XMLWRITER_COMMENT);** to see XML structure + comments.
+
 
 ## Operation
 
