@@ -93,6 +93,7 @@ unittest(test_indent)
   XML.setIndentSize(2);
   XML.indent();
   assertEqual(0, XML.bytesWritten());
+  fprintf(stderr, "%d\n", XML.bufferIndex());
   assertEqual(2, XML.bufferIndex());
   
   XML.reset();
@@ -100,6 +101,7 @@ unittest(test_indent)
   XML.incrIndent();
   XML.indent();
   assertEqual(0, XML.bytesWritten());
+  fprintf(stderr, "%d\n", XML.bufferIndex());
   assertEqual(4, XML.bufferIndex());
   
   XML.reset();
@@ -108,6 +110,7 @@ unittest(test_indent)
   XML.decrIndent();
   XML.indent();
   assertEqual(0, XML.bytesWritten());
+  fprintf(stderr, "%d\n", XML.bufferIndex());
   assertEqual(2, XML.bufferIndex());
 }
 
