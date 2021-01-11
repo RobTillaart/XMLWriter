@@ -67,7 +67,7 @@ unittest(test_header_flush)
   assertEqual(0, XML.bytesWritten());
   assertEqual(0, XML.bufferIndex());
   
-  assertEqual(0, XML.flush());
+  XML.flush();
   assertEqual(0, XML.bytesWritten());
   assertEqual(0, XML.bufferIndex());
   

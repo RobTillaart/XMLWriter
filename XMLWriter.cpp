@@ -22,7 +22,7 @@
 //  0.2.3  2020-06-19  fix library.json
 //  0.2.4  2020-07-07  fix #6 Print interface made public
 //  0.3.0  2021-01-09  arduino-ci + unit tests
-//                     add getIndentSize(); 
+//                     add getIndentSize(); version(); debug();
 
 
 #include "XMLWriter.h"
