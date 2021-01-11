@@ -8,5 +8,5 @@ compile:
   libraries:
     - "Ethernet"
     - "SD"
-    #- "printHelpers"
+    - "printHelpers"
     - "Complex"
