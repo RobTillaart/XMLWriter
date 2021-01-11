@@ -64,11 +64,12 @@ unittest(test_header_flush)
   XMLWriter XML(&Serial);
 
   XML.header();
-  assertEqual(0, XML.bytesWritten());
-  assertEqual(0, XML.bufferIndex());
+  assertEqual(36, XML.bytesWritten());
+  fprintf(stderr, "%d\n", XML.bufferIndex());
+  assertEqual(6, XML.bufferIndex());
   
   XML.flush();
-  assertEqual(0, XML.bytesWritten());
+  assertEqual(39, XML.bytesWritten());
   assertEqual(0, XML.bufferIndex());
   
   XML.reset();
@@ -89,23 +90,21 @@ unittest(test_indent)
   }
   assertEqual(0, XML.bytesWritten());
   
+  XML.reset();
   XML.setIndentSize(2);
-  for (int i = 0; i < 5; i++)
-  {
-    uint8_t indent = XML.getIndentSize();
-    XML.incrIndent();
-    assertEqual(indent + 2, XML.getIndentSize());
-  }
-  assertEqual(0, XML.bytesWritten());
+  XML.indent();
+  assertEqual(2, XML.bytesWritten());
 
-  for (int i = 0; i < 5; i++)
-  {
-    uint8_t indent = XML.getIndentSize();
-    XML.decrIndent();
-    assertEqual(indent - 2, XML.getIndentSize());
-  }
-  assertEqual(0, XML.bytesWritten());
-  
+  XML.reset();
+  XML.setIndentSize(2);
+  XML.incrIndent();
+  XML.indent();
+  assertEqual(4, XML.bytesWritten());
+
+  XML.reset();
+  XML.setIndentSize(2);
+  XML.incrIndent();
+  XML.decrIndent();
   XML.indent();
   assertEqual(2, XML.bytesWritten());
 }
@@ -117,16 +116,17 @@ unittest(test_header_comment_version_debug)
   assertEqual(0, XML.bytesWritten());
 
   XML.header();
-  assertEqual(0, XML.bytesWritten());
+  assertEqual(36, XML.bytesWritten());
   XML.comment("This is a demo of\na simple XML lib for Arduino!", true);
-  assertEqual(0, XML.bytesWritten());
+  assertEqual(99, XML.bytesWritten());
   XML.version();
-  assertEqual(0, XML.bytesWritten());
+  assertEqual(126, XML.bytesWritten());
   XML.debug();
-  assertEqual(0, XML.bytesWritten());
+  assertEqual(225, XML.bytesWritten());
 
   XML.flush();
-  assertEqual(0, XML.bytesWritten());
+  assertEqual(229, XML.bytesWritten());
+  assertEqual(0, XML.bufferIndex());      // nothing to flush
 }
 
 
