@@ -48,8 +48,68 @@ unittest(test_constructor)
 {
   fprintf(stderr, "VERSION: %s\n", XMLWRITER_VERSION);
 
-  assertEqual(1, 1);
+  XMLWriter XML(&Serial);
+  assertEqual(0, XML.bytesWritten());
+  assertEqual(2, XML.getIndentSize());
+
+  // OK it is a debug function but should work
+  assertEqual(0, XML.bufferIndex());
 }
+
+
+unittest(test_header_flush)
+{
+  fprintf(stderr, "VERSION: %s\n", XMLWRITER_VERSION);
+
+  XMLWriter XML(&Serial);
+
+  XML.header();
+  assertEqual(0, XML.bytesWritten());
+  assertEqual(0, XML.bufferIndex());
+  
+  XML.flush();
+  assertEqual(0, XML.bytesWritten());
+  assertEqual(0, XML.bufferIndex());
+  
+  XML.reset();
+  assertEqual(0, XML.bytesWritten());
+  assertEqual(0, XML.bufferIndex());
+}
+
+
+
+unittest(test_indent)
+{
+  XMLWriter XML(&Serial);
+  assertEqual(0, XML.bytesWritten());
+  
+  for (uint8_t indent = 0; indent < 10; indent += 2)
+  {
+    XML.setIndentSize(indent);
+    assertEqual(indent, XML.getIndentSize());
+  }
+  assertEqual(0, XML.bytesWritten());
+  
+  XML.setIndentSize(2);
+  for (int i = 0; i < 5; i++)
+  {
+    indent = XML.getIndentSize();
+    XML.incrIndent();
+    assertEqual(indent + 2, XML.getIndentSize());
+  }
+  assertEqual(0, XML.bytesWritten());
+
+  for (int i = 0; i < 5; i++)
+  {
+    indent = XML.getIndentSize();
+    XML.decrIndent();
+    assertEqual(indent - 2, XML.getIndentSize());
+  }
+  
+  XML.indent();
+  assertEqual(2, XML.bytesWritten());
+}
+
 
 unittest_main()
 

@@ -42,12 +42,12 @@ XMLWriter::~XMLWriter()
 
 void XMLWriter::reset()
 {
-  _indent = 0;
+  _indent     = 0;
   _indentStep = 2;
-  _tidx = 0;
-  _bidx = 0;
-  _config = XMLWRITER_COMMENT | XMLWRITER_INDENT | XMLWRITER_NEWLINE;
-  _bytesOut = 0;
+  _tidx       = 0;
+  _bidx       = 0;
+  _config     = XMLWRITER_COMMENT | XMLWRITER_INDENT | XMLWRITER_NEWLINE;
+  _bytesOut   = 0;
 }
 
 void XMLWriter::header()
@@ -168,10 +168,6 @@ void XMLWriter::writeNode(const char* tag, const char* str)
   tagClose(NOINDENT);
 }
 
-void XMLWriter::setIndentSize(const uint8_t size)
-{
-  _indentStep = size;
-}
 
 ///////////////////////////////////////////////////////////////
 //

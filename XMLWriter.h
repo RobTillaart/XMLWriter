@@ -94,7 +94,8 @@ public:
 
   // typically 0,2,4; default == 2;
   // multiple of 2;
-  void setIndentSize(const uint8_t size = 2);
+  void    setIndentSize(const uint8_t size = 2); { _indentStep = size; };
+  uint8_t getIndentSize() { return _indentStep; };
 
   // for manual layout control
   void incrIndent()       { _indent += _indentStep; };
