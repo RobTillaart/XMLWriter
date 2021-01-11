@@ -77,7 +77,6 @@ unittest(test_header_flush)
 }
 
 
-
 unittest(test_indent)
 {
   XMLWriter XML(&Serial);
@@ -105,8 +104,23 @@ unittest(test_indent)
     XML.decrIndent();
     assertEqual(indent - 2, XML.getIndentSize());
   }
+  assertEqual(0, XML.bytesWritten());
   
   XML.indent();
+  assertEqual(2, XML.bytesWritten());
+}
+
+
+unittest(test_comment)
+{
+  XMLWriter XML(&Serial);
+  assertEqual(0, XML.bytesWritten());
+
+  XML.header();
+  XML.comment("This is a demo of\na simple XML lib for Arduino!", true);
+  assertEqual(0, XML.bytesWritten());
+
+  XML.flush();
   assertEqual(2, XML.bytesWritten());
 }
 
