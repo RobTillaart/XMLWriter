@@ -66,8 +66,12 @@ public:
   // standard XML header
   void header();
 
-  // void meta();
-  
+  // prints XMLWRITER_VERSION as comment
+  void version();
+
+  void debug();
+
+
   // if multiline == true it does not indent to allow bigger text blocks
   // <!-- text -->
   void comment(const char* text, const bool multiLine = false);
@@ -75,6 +79,8 @@ public:
   // add a number of newlines to the output, default = 1.
   void newLine(uint8_t n = 1);
 
+  // TAG
+  //
   // <tag>
   void tagOpen(const char* tag, const bool newline = true);
   // <tag name="name">
@@ -92,16 +98,19 @@ public:
   // <tag>value</tag>
   void writeNode(const char* tag, const char* value);
 
+
+  // INDENT
+  //
   // typically 0,2,4; default == 2;
   // multiple of 2;
   void    setIndentSize(const uint8_t size = 2) { _indentStep = size; };
   uint8_t getIndentSize() { return _indentStep; };
-
   // for manual layout control
   void incrIndent()       { _indent += _indentStep; };
   void decrIndent()       { _indent -= _indentStep; };
   void indent();
   void raw(const char * str) { print(str); };
+
 
   void tagField(const char* field, const uint8_t  value, const uint8_t base = DEC);
   void tagField(const char* field, const uint16_t value, const uint8_t base = DEC);
@@ -114,6 +123,8 @@ public:
   void tagField(const char* field, const float    value, const uint8_t decimals = 2);
   void tagField(const char* field,  double   value, const uint8_t decimals = 2);
 
+
+
   void writeNode(const char* tag, const uint8_t   value, const uint8_t base = DEC);
   void writeNode(const char* tag, const uint16_t  value, const uint8_t base = DEC);
   void writeNode(const char* tag, const uint32_t  value, const uint8_t base = DEC);
@@ -125,18 +136,23 @@ public:
   void writeNode(const char* tag, const float     value, const uint8_t decimals = 2);
   void writeNode(const char* tag, const double    value, const uint8_t decimals = 2);
 
+
+
 #ifdef XMLWRITER_ESCAPE_SUPPORT
   // expands the special xml chars
   void escape(const char* str);
 #endif
 
-  // One need to call flush() at the end of writing to empty 
-  // the internal buffer.
-  void     flush();
-  
+
+  // One need to call flush() at the end of writing to empty the internal buffer.
+  // returns the number of bytes flushed.
+  uint8_t  flush();
+
+
   // metrics
   uint8_t  bufferIndex()  { return _bidx; };
-  uint32_t bytesWritten() { return _bytesOut; } ;
+  uint32_t bytesWritten() { return _bytesOut; };
+
 
 private:
   // outputstream, Print Class

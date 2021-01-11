@@ -22,6 +22,7 @@
 //  0.2.3  2020-06-19  fix library.json
 //  0.2.4  2020-07-07  fix #6 Print interface made public
 //  0.2.5  2021-01-09  arduino-ci + unit tests
+//                     add getIndentSize();
 
 
 #include "XMLWriter.h"
@@ -35,10 +36,12 @@ XMLWriter::XMLWriter(Print* stream, uint8_t bufsize)
   reset();
 }
 
+
 XMLWriter::~XMLWriter()
 {
   if (_buffer != NULL) free(_buffer);
 }
+
 
 void XMLWriter::reset()
 {
@@ -50,25 +53,37 @@ void XMLWriter::reset()
   _bytesOut   = 0;
 }
 
+
 void XMLWriter::header()
 {
   print(F("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"));
 }
 
-// void XMLWriter::meta()
-// {
-  // print(F("<!-- "));
-  // print('\n');
-  // print(F(" VERSION: "));
-  // println(XMLWRITER_VERSION);
-  // print(F("MAXLEVEL: "));
-  // println(XMLWRITER_MAXLEVEL);
-  // print(F(" TAGSIZE: "));
-  // println(XMLWRITER_MAXTAGSIZE);
-  // print(F("  CONFIG: "));
-  // println(_config);
-  // print(F(" -->\n"));
-// }
+
+void XMLWriter::version()
+{
+  print(F("<!-- "));
+  print(F(" XMLWRITER_VERSION: "));
+  print(XMLWRITER_VERSION);
+  print(F(" -->\n"));
+}
+
+
+void XMLWriter::debug()
+{
+  print(F("<!-- "));
+  print('\n');
+  print(F(" VERSION: "));
+  println(XMLWRITER_VERSION);
+  print(F("MAXLEVEL: "));
+  println(XMLWRITER_MAXLEVEL);
+  print(F(" TAGSIZE: "));
+  println(XMLWRITER_MAXTAGSIZE);
+  print(F("  CONFIG: "));
+  println(_config);
+  print(F(" -->\n"));
+}
+
 
 void XMLWriter::comment(const char* text, const bool multiLine)
 {
@@ -84,6 +99,7 @@ void XMLWriter::comment(const char* text, const bool multiLine)
   }
 }
 
+
 void XMLWriter::newLine(uint8_t n)
 {
   if (_config & XMLWRITER_NEWLINE)
@@ -91,6 +107,7 @@ void XMLWriter::newLine(uint8_t n)
     while(n--) print('\n');
   }
 }
+
 
 void XMLWriter::tagOpen(const char* tag, const bool newline)
 {
@@ -308,8 +325,9 @@ size_t XMLWriter::write(uint8_t c)
   return 1;
 };
 
-void XMLWriter::flush()
+uint8_t XMLWriter::flush()
 {
+  uint8_t rv = _bidx;
   _bytesOut += _bidx;
   if (_bidx > 0)
   {
@@ -317,6 +335,7 @@ void XMLWriter::flush()
     _stream->print(_buffer);
     _bidx = 0;
   }
+  return rv;
 };
 
 
