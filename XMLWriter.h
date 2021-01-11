@@ -2,7 +2,7 @@
 //
 //    FILE: XMLWriter.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.5
+// VERSION: 0.3.0
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
 //
@@ -11,21 +11,21 @@
 #include "Arduino.h"
 
 
-#define XMLWRITER_VERSION         (F("0.2.5"))
+#define XMLWRITER_VERSION         (F("0.3.0"))
 
 
 // for comment()
-#define NOMULTILINE     false
-#define MULTILINE       true
+#define NOMULTILINE           false
+#define MULTILINE             true
 
 // for tagOpen(), tagEnd()
-#define NEWLINE         true
-#define NONEWLINE       false
-#define NOINDENT        false    // for tagClose()
+#define NEWLINE               true
+#define NONEWLINE             false
+#define NOINDENT              false    // for tagClose()
 
 // for tagEnd()
-#define SLASH           true
-#define NOSLASH         false
+#define SLASH                 true
+#define NOSLASH               false
 
 // deepness of XML tree 5..10
 // needed for stack of tagStack
@@ -69,6 +69,7 @@ public:
   // prints XMLWRITER_VERSION as comment
   void version();
 
+  // prints debug information into the XML as comment
   void debug();
 
 
@@ -171,6 +172,7 @@ private:
   uint8_t  _tidx;
   char     _tagStack[XMLWRITER_MAXLEVEL][XMLWRITER_MAXTAGSIZE + 1];
 
+  // output admin
   char *   _buffer;
   uint8_t  _bufsize;
   uint8_t  _bidx;

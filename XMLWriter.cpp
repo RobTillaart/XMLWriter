@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriter.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.5
+// VERSION: 0.3.0
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML 
 //
@@ -21,8 +21,8 @@
 //  0.2.2  2020-04-29  dynamic buffer size in constructor
 //  0.2.3  2020-06-19  fix library.json
 //  0.2.4  2020-07-07  fix #6 Print interface made public
-//  0.2.5  2021-01-09  arduino-ci + unit tests
-//                     add getIndentSize();
+//  0.3.0  2021-01-09  arduino-ci + unit tests
+//                     add getIndentSize(); 
 
 
 #include "XMLWriter.h"
@@ -80,7 +80,11 @@ void XMLWriter::debug()
   print(F(" TAGSIZE: "));
   println(XMLWRITER_MAXTAGSIZE);
   print(F("  CONFIG: "));
-  println(_config);
+  println(_config, HEX);
+  print(F("  INDENT: "));
+  println(_indent);
+  print(F(" BUFSIZE: "));
+  println(_bufsize);
   print(F(" -->\n"));
 }
 
