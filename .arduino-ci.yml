@@ -22,7 +22,7 @@ compile:
     - leonardo
     - m4
     - esp32
-    - esp8266
+    # - esp8266  #  causes analog pins to fail
     - mega2560
     - rpipico
 
