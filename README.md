@@ -40,6 +40,14 @@ Run your tests to find your application optimum.
 **IMPORTANT:** When using buffering you should always call **XML.flush()** 
 at the end of the XML generation. This will flush the last bytes in the internal buffer into the output stream.
 
+As always, feedback or improvements are welcome. 
+Please open an issue.
+
+
+### Related
+
+- https://github.com/RobTillaart/printHelpers  Formatting incl scientific notation (large floats)
+
 
 ## Interface
 
@@ -49,27 +57,46 @@ at the end of the XML generation. This will flush the last bytes in the internal
 
 ### Constructor
 
-- **XMLWriter(Print\* stream = &Serial, uint8_t bufferSize = 10)** Constructor defines the stream and the buffer size
-to optimize performance vs memory usage.
+- **XMLWriter(Print\* stream = &Serial, uint8_t bufferSize = 10)** Constructor defines 
+the stream and the buffer size to optimize performance vs memory usage.
 Note the default bufferSize of 10 can be optimized. 
 See table in description above.
+- **~XMLWriter()** destructor
 
 
 ### Functions for manual layout control
 
 - **void setIndentSize(uint8_t size = 2)** preferred a multiple of 2; no limit.
-- **uint8_t getIndentSize()** returns set indent.
-- **void incrIndent()** increments indent by 2 spaces.
-- **void decrIndent()** decrements indent by 2 spaces.
+For compact XML with no indents set size to zero.
+- **uint8_t getIndentSize()** returns set indent size.
+- **void incrIndent()** increments indent by defined spaces (default 2).
+- **void decrIndent()** decrements indent by defined spaces (default 2).
 - **void indent()** manually indent output.
-- **void raw(char\* str)** inject any string.
+- **void raw(char\* str)** inject any string into XML, use with care.
 
 
 ### General settings
 
 - **void setConfig(uint8_t config)** used to show/strip comment, indent, newLine. 
-use **setConfig(0);** to minimize the output.
+To minimize the output, use **setConfig(0);**, see table below.
 - **void newLine(uint8_t n)** add a number of newlines to the output, default = 1.
+
+#### Configuration flags
+
+|  Config flags              |  Value  |  Notes  |
+|:---------------------------|:-------:|:--------|
+|  XMLWRITER_NONE            |   0x00  |  minimizes the output size, smaller and faster.
+|  XMLWRITER_COMMENT         |   0x01  |  allow comments
+|  XMLWRITER_INDENT          |   0x02  |  allow indents
+|  XMLWRITER_NEWLINE         |   0x04  |  allow newlines
+|  XMLWRITER_CONFIG_DEFAULT  |   0x07  |  default after reset()
+
+
+- **setConfig(XMLWRITER_NONE);** to minimize the output in bytes.
+- **setConfig(XMLWRITER_NEWLINE);** to "break" an XML stream in lines.
+- **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT);** to see XML structure.
+- **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT | XMLWRITER_COMMENT);** to see XML structure + comments.
+- **setConfig(XMLWRITER_CONFIG_DEFAULT);** to see XML structure + comments.
 
 
 ### Functions
@@ -79,31 +106,34 @@ use **setConfig(0);** to minimize the output.
 - **void comment(char\* text, bool multiLine = false)** \<!-- text --\>  
 if multiline == true it does not indent to allow bigger text blocks
 multiline is default false.
-- **void flush()** call flush() at the end of writing to empty the internal buffer. **!!**
+- **bool needFlush()** checks if internal buffer has unwritten data.
+- **void flush()** flushes the internal buffer. Call flush() at the end of writing 
+to the XML file to empty the remainder in the internal buffer. **!!**
 
 
 ### Functions to create simple tags with named fields
 
-- **void tagOpen(char\* tag, bool newLine)** \<tag\>
-- **void tagOpen(char\* tag, char\* name, bool newLine)** \<tag name="name"\>
-- **void tagClose()** \</tag\>
+- **void tagOpen(char\* tag, bool newLine)** writes \<tag\>
+- **void tagOpen(char\* tag, char\* name, bool newLine)** writes \<tag name="name"\>
+- **void tagClose()** writes \</tag\>
 
 
-### Functions to make up tags with multiple fields
+### Functions to create tags with multiple fields
 
-- **void tagStart(char\* tag)**  \<tag 
-- **void tagField(char\* field, char\* string)**  field="string"
-- **void tagField(char\* field, T value, uint8_t base = DEC)** standard math types,  field="value"
-- **void tagEnd(bool newline = true, bool addSlash = true);**  /\>
-
-
-### Functions to make a node
-
-- **void writeNode(char\* tag, bool value);** \<tag\>value\</tag\>
-- **void writeNode(char\* tag, T value, uint8_t base = DEC);** standard math types.
+- **void tagStart(char\* tag)** writes \<tag 
+- **void tagField(char\* field, char\* string)** writes field="string"
+- **void tagField(char\* field, T value, uint8_t base = DEC)** write the standard math types,  
+field="value"
+- **void tagEnd(bool newline = true, bool addSlash = true);**  writes /\>
 
 
-### Helper 
+### Functions to create a node
+
+- **void writeNode(char\* tag, bool value);** writes \<tag\>value\</tag\>
+- **void writeNode(char\* tag, T value, uint8_t base = DEC);** writes standard math types.
+
+
+### Escape helper 
 
 - **void escape(char\* str)** expands the XML chars: \"\'\<\>\&
 Note one need to set the **XMLWRITER_ESCAPE_SUPPORT** flag.
@@ -122,11 +152,12 @@ To optimize buffer size in combination with timing.
 ## Print interface
 
 XMLWriter 0.2.4 implements the Print interface, so at any moment one can use 
-**print()** or **println()** to inject specific information. 
+**print()** or **println()** to inject specific information.  
+Note that one might need to call **flush()** to flush the internal buffer first.
 
 Note that **tagField()** and **writeNode()** do not support 64 bit integer
-types and large values of double. 
-My **printHelpers library** helps to convert these to strings which can be printed.
+types and large values of float and double. 
+My **printHelpers library** helps to convert these data types to strings which can be printed.
 See example.
 
 The Print interface can also be used to print objects that 
@@ -134,27 +165,6 @@ implement the **Printable** interface. See example.
 
 With the support of the Print interface, **raw()** is becoming obsolete as it only
 can inject strings.
-
-
-## Configuration flags
-
-|  Flag               |  Value  |  Description        |
-|:--------------------|:--------|:--------------------|
-|  XMLWRITER_NONE     |  0x00   |  minimize output, smaller & faster |
-|  XMLWRITER_COMMENT  |  0x01   |  allow comments     |
-|  XMLWRITER_INDENT   |  0x02   |  allow indentation  |
-|  XMLWRITER_NEWLINE  |  0x04   |  allow newlines     |
-
-
-- **setConfig(XMLWRITER_NONE);** to minimize the output in bytes.
-- **setConfig(XMLWRITER_NEWLINE);** to break an XML stream in lines.
-- **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT);** to see XML structure.
-- **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT | XMLWRITER_COMMENT);** to see XML structure + comments.
-
-
-## Operation
-
-See examples
 
 
 ## Future

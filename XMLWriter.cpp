@@ -1,7 +1,7 @@
 //
 //    FILE: XMLWriter.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.3.5
+// VERSION: 0.4.0
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML
 
@@ -38,7 +38,7 @@ void XMLWriter::reset()
 void XMLWriter::setConfig(uint8_t config)
 {
   _config = config;
-};
+}
 
 
 void XMLWriter::header()
@@ -100,6 +100,25 @@ void XMLWriter::newLine(uint8_t n)
 }
 
 
+///////////////////////////////////////////////////////////////
+//
+//  INDENT
+//
+void XMLWriter::indent()
+{
+  if (_config & XMLWRITER_INDENT)
+  {
+    //  as indentation is a multiple of 2
+    //  this is nice balance between speed and RAM.
+    for (uint8_t i = _indent; i > 0; i-= 2) print("  ");
+  }
+}
+
+
+///////////////////////////////////////////////////////////////
+//
+//  TAG
+//
 void XMLWriter::tagOpen(const char* tag, const bool newline)
 {
   tagOpen(tag, "", newline);
@@ -221,12 +240,6 @@ void XMLWriter::tagField(const char *field, const int16_t value, const uint8_t b
 }
 
 
-void XMLWriter::tagField(const char *field, const int value, const int base)
-{
-  tagField(field, (int32_t) value, (uint8_t) base);
-}
-
-
 void XMLWriter::tagField(const char *field, const int32_t value, const uint8_t base)
 {
   print(' ');
@@ -237,12 +250,28 @@ void XMLWriter::tagField(const char *field, const int32_t value, const uint8_t b
 }
 
 
+void XMLWriter::tagField(const char *field, const int value, const int base)
+{
+  tagField(field, (int32_t) value, (uint8_t) base);
+}
+
+
 void XMLWriter::tagField(const char *field, const bool value)
 {
   print(' ');
   print(field);
-  //  F() is slower & uses less RAM but 15 bytes saved
+  //  F() is slower & uses less RAM ==> 15 bytes saved
   print(value ? F("=\"true\"") : F("=\"false\""));
+}
+
+
+void XMLWriter::tagField(const char *field, const float value, const uint8_t decimals)
+{
+  print(' ');
+  print(field);
+  print(F("=\""));
+  print(value, decimals);
+  print('"');
 }
 
 
@@ -292,17 +321,17 @@ void XMLWriter::writeNode(const char* tag, const int16_t value, const uint8_t ba
 }
 
 
-void XMLWriter::writeNode(const char* tag, const int value, const int base)
-{
-  writeNode(tag, (int32_t) value, (uint8_t) base);
-}
-
-
 void XMLWriter::writeNode(const char* tag, const int32_t value, const uint8_t base)
 {
   tagOpen(tag, "", NONEWLINE);
   print(value, base);
   tagClose(NOINDENT);
+}
+
+
+void XMLWriter::writeNode(const char* tag, const int value, const int base)
+{
+  writeNode(tag, (int32_t) value, (uint8_t) base);
 }
 
 
@@ -323,43 +352,10 @@ void XMLWriter::writeNode(const char* tag, const double value, const uint8_t dec
 }
 
 
-void XMLWriter::indent()
-{
-  if (_config & XMLWRITER_INDENT)
-  {
-    //  as indentation is a multiple of 2
-    //  this is nice balance between speed and RAM.
-    for (uint8_t i = _indent; i > 0; i-= 2) print("  ");
-  }
-}
-
-
-size_t XMLWriter::write(uint8_t c)
-{
-  _buffer[_bufferIndex++] = c;
-  if (_bufferIndex == (_bufferSize - 1)) flush();
-  return 1;
-};
-
-
-void XMLWriter::flush()
-{
-  _bytesOut += _bufferIndex;
-  if (_bufferIndex > 0)
-  {
-    _buffer[_bufferIndex] = 0;
-    _stream->write(_buffer, _bufferIndex);  //  saves ~40 bytes on UNO.
-    //  _stream->print(_buffer);
-    _bufferIndex = 0;
-  }
-};
-
-
 ////////////////////////////////////////////////////////////////////
 //
 //  ESCAPE
 //
-
 #ifdef XMLWRITER_ESCAPE_SUPPORT
 static char c[6] = "\"\'<>&";
 
@@ -406,7 +402,39 @@ void XMLWriter::escape(const char* str)
     p++;
   }
 }
-#endif
+#endif XMLWRITER_ESCAPE_SUPPORT
+
+
+////////////////////////////////////////////////////////////////////
+//
+//  PRINT INTERFACE override
+//
+void XMLWriter::flush()
+{
+  _bytesOut += _bufferIndex;
+  if (_bufferIndex > 0)
+  {
+    _buffer[_bufferIndex] = 0;
+    _stream->write(_buffer, _bufferIndex);  //  saves ~40 bytes on UNO.
+    //  _stream->print(_buffer);
+    _bufferIndex = 0;
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////
+//
+//  PRIVATE
+//
+size_t XMLWriter::write(uint8_t c)
+{
+  _buffer[_bufferIndex++] = c;
+  if (_bufferIndex == (_bufferSize - 1))
+  {
+    flush();
+  }
+  return 1;
+}
 
 
 //  -- END OF FILE --
