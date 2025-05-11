@@ -109,21 +109,18 @@ public:
   //  <tag name="name">
   void tagOpen(const char* tag, const char* name, const bool newline = true);
   //  </tag>
-  void tagClose(const bool ind = true);
+  void tagClose(const bool indent = true);
   //  <tag
   void tagStart(const char* tag);
-  //  field="value"
-  void tagField(const char* field, const char* value);
   //   />
   void tagEnd(const bool newline = true, const bool addSlash = true);
-
-  //  <tag>value</tag>
-  void writeNode(const char* tag, const char* value);
 
 
   //
   //  TAGFIELD
   //
+  //  field="value"
+  void tagField(const char* field, const char* value);
   void tagField(const char* field, const uint8_t  value, const uint8_t base = DEC);
   void tagField(const char* field, const uint16_t value, const uint8_t base = DEC);
   void tagField(const char* field, const uint32_t value, const uint8_t base = DEC);
@@ -135,9 +132,12 @@ public:
   void tagField(const char* field, const float    value, const uint8_t decimals = 2);
   void tagField(const char* field, const double   value, const uint8_t decimals = 2);
 
+
   //
   //  WRITENODE
   //
+  //  <tag>value</tag>
+  void writeNode(const char* tag, const char* value);
   void writeNode(const char* tag, const uint8_t   value, const uint8_t base = DEC);
   void writeNode(const char* tag, const uint16_t  value, const uint8_t base = DEC);
   void writeNode(const char* tag, const uint32_t  value, const uint8_t base = DEC);

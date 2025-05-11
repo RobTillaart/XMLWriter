@@ -24,12 +24,15 @@ indent	KEYWORD2
 tagOpen	KEYWORD2
 tagClose	KEYWORD2
 tagStart	KEYWORD2
-tagField	KEYWORD2
 tagEnd	KEYWORD2
 
+tagField	KEYWORD2
 writeNode	KEYWORD2
+
 escape	KEYWORD2
+needFlush	KEYWORD2
 flush	KEYWORD2
+
 
 bufferIndex	KEYWORD2
 bytesWritten	KEYWORD2

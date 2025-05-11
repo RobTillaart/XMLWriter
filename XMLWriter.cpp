@@ -72,6 +72,8 @@ void XMLWriter::debug()
   println(_indent);
   print(F(" BUFSIZE: "));
   println(_bufferSize);
+  print(F("BYTESOUT: "));
+  println(_bytesOut);
   print(F(" -->\n"));
 }
 
@@ -150,10 +152,10 @@ void XMLWriter::tagOpen(const char* tag, const char* name, const bool newline)
 }
 
 
-void XMLWriter::tagClose(const bool ind)
+void XMLWriter::tagClose(const bool indent)
 {
   _indent -= _indentStep;
-  if (ind) indent();
+  if (indent) indent();
   print("</");
   print(_tagStack[--_tagIndex]);
   print(">\n");
@@ -357,6 +359,7 @@ void XMLWriter::writeNode(const char* tag, const double value, const uint8_t dec
 //  ESCAPE
 //
 #ifdef XMLWRITER_ESCAPE_SUPPORT
+
 static char c[6] = "\"\'<>&";
 
 #ifdef __PROGMEM__

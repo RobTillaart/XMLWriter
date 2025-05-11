@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix #16, missing writeNode(...float...), kudos for PaulA-V
 - add **bool needFlush()**
 - make **XMLWRITER_ESCAPE_SUPPORT** a command line option
+- extend **debug()** output with bytes written.
+- add example **XMLWriterTestDebug.ino**
 - update readme.md
 - update keywords.txt
 - reorder .h and .cpp

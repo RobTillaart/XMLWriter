@@ -47,6 +47,8 @@ Please open an issue.
 ### Related
 
 - https://github.com/RobTillaart/printHelpers  Formatting incl scientific notation (large floats)
+- https://github.com/RobTillaart/PrintString  Make a string representation
+- https://github.com/RobTillaart/MultiPlex  send stream to multiple destinations (e.g. File and Screen)
 
 
 ## Interface
@@ -72,32 +74,32 @@ For compact XML with no indents set size to zero.
 - **void incrIndent()** increments indent by defined spaces (default 2).
 - **void decrIndent()** decrements indent by defined spaces (default 2).
 - **void indent()** manually indent output.
-- **void raw(char\* str)** inject any string into XML, use with care.
+- **void raw(char\* str)** inject any string into XML, use with care!
 
 
 ### General settings
 
 - **void setConfig(uint8_t config)** used to show/strip comment, indent, newLine. 
 To minimize the output, use **setConfig(0);**, see table below.
-- **void newLine(uint8_t n)** add a number of newlines to the output, default = 1.
+- **void newLine(uint8_t n = 1)** add a number of newlines to the output, default = 1.
 
 #### Configuration flags
 
-|  Config flags              |  Value  |  Notes  |
+|  setConfig flags           |  Value  |  Notes  |
 |:---------------------------|:-------:|:--------|
 |  XMLWRITER_NONE            |   0x00  |  minimizes the output size, smaller and faster.
-|  XMLWRITER_COMMENT         |   0x01  |  allow comments
-|  XMLWRITER_INDENT          |   0x02  |  allow indents
-|  XMLWRITER_NEWLINE         |   0x04  |  allow newlines
-|  XMLWRITER_CONFIG_DEFAULT  |   0x07  |  default after reset()
+|  XMLWRITER_COMMENT         |   0x01  |  enable comments
+|  XMLWRITER_INDENT          |   0x02  |  enable indents
+|  XMLWRITER_NEWLINE         |   0x04  |  enable newlines
+|  XMLWRITER_CONFIG_DEFAULT  |   0x07  |  enable all, default after reset()
 
-
-- **setConfig(XMLWRITER_NONE);** to minimize the output in bytes.
-- **setConfig(XMLWRITER_NEWLINE);** to "break" an XML stream in lines.
-- **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT);** to see XML structure.
-- **setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT | XMLWRITER_COMMENT);** to see XML structure + comments.
-- **setConfig(XMLWRITER_CONFIG_DEFAULT);** to see XML structure + comments.
-
+```cpp
+setConfig(XMLWRITER_NONE);       //  minimize the output in bytes.
+setConfig(XMLWRITER_NEWLINE);    //  "break up" an XML stream in logic lines.
+setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT); //  show XML structure. (pretty print)
+setConfig(XMLWRITER_NEWLINE | XMLWRITER_INDENT | XMLWRITER_COMMENT);  // show XML structure + comments.
+setConfig(XMLWRITER_CONFIG_DEFAULT);  //  show XML structure + comments.
+```
 
 ### Functions
 
@@ -110,27 +112,41 @@ multiline is default false.
 - **void flush()** flushes the internal buffer. Call flush() at the end of writing 
 to the XML file to empty the remainder in the internal buffer. **!!**
 
+The comment() can be used to quickly embed compile time constants into the XML file.
+```cpp
+  XML.comment(__DATE__);
+  XML.comment(__TIME__);
+  XML.comment(__FILE__);
+  XML.comment(__FUNCTION__);
+```
+
+Other data types can easily be converted by means of - https://github.com/RobTillaart/PrintString
+
 
 ### Functions to create simple tags with named fields
 
-- **void tagOpen(char\* tag, bool newLine)** writes \<tag\>
-- **void tagOpen(char\* tag, char\* name, bool newLine)** writes \<tag name="name"\>
-- **void tagClose()** writes \</tag\>
+- **void tagOpen(char\* tag, bool newLine = true)** writes \<tag\>
+- **void tagOpen(char\* tag, char\* name, bool newLine = true)** writes \<tag name="name"\>
+- **void tagClose(bool indent = true)** writes \</tag\>
 
 
 ### Functions to create tags with multiple fields
 
 - **void tagStart(char\* tag)** writes \<tag 
 - **void tagField(char\* field, char\* string)** writes field="string"
-- **void tagField(char\* field, T value, uint8_t base = DEC)** write the standard math types,  
-field="value"
+- **void tagField(char\* field, T value, uint8_t base = DEC)** writes the standard integer math types,  
+field="value".
+- **void tagField(char\* field, float value, uint8_t decimals = 2)**
+- **void tagField(char\* field, double value, uint8_t decimals = 2)**
 - **void tagEnd(bool newline = true, bool addSlash = true);**  writes /\>
 
 
 ### Functions to create a node
 
 - **void writeNode(char\* tag, bool value);** writes \<tag\>value\</tag\>
-- **void writeNode(char\* tag, T value, uint8_t base = DEC);** writes standard math types.
+- **void writeNode(char\* tag, T value, uint8_t base = DEC);** writes standard integer math types.
+- **void writeNode(char\* tag, float value, uint8_t decimals = 2)**
+- **void writeNode(char\* tag, double value, uint8_t decimals = 2)**
 
 
 ### Escape helper 
@@ -177,6 +193,9 @@ can inject strings.
 
 #### Could
 
+- what can be configured?
+- **uint8_t getConfig()** returns mask
+- **void comment(int)** in all its variations,
 - move code to .cpp
 
 #### Wont

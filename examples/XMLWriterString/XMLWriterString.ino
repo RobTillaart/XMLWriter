@@ -1,5 +1,5 @@
 //
-//    FILE: XMLWriterSting.ino
+//    FILE: XMLWriterString.ino
 //  AUTHOR: Rob Tillaart
 // PURPOSE: demo
 //     URL: https://github.com/RobTillaart/PrintString
@@ -7,7 +7,7 @@
 
 
 #include "PrintString.h"
-#include "XMLWriter.h"      // https://github.com/RobTillaart/XMLWriter
+#include "XMLWriter.h"
 
 PrintString ps;
 XMLWriter XML(&ps);
