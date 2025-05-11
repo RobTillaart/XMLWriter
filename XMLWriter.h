@@ -5,6 +5,7 @@
 // VERSION: 0.4.0
 //    DATE: 2013-11-06
 // PURPOSE: Arduino library for creating XML
+//     URL: https://github.com/RobTillaart/XMLWriter
 
 
 #include "Arduino.h"
