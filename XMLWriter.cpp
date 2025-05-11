@@ -153,10 +153,11 @@ void XMLWriter::tagOpen(const char* tag, const char* name, const bool newline)
 }
 
 
-void XMLWriter::tagClose(const bool indent)
+//  ind == indent flag 
+void XMLWriter::tagClose(const bool ind)
 {
   _indent -= _indentStep;
-  if (indent) indent();
+  if (ind) indent();
   print("</");
   print(_tagStack[--_tagIndex]);
   print(">\n");

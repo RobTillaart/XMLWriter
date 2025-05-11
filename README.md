@@ -127,7 +127,7 @@ Other data types can easily be converted by means of - https://github.com/RobTil
 
 - **void tagOpen(char\* tag, bool newLine = true)** writes \<tag\>
 - **void tagOpen(char\* tag, char\* name, bool newLine = true)** writes \<tag name="name"\>
-- **void tagClose(bool indent = true)** writes \</tag\>
+- **void tagClose(bool ind = true)** writes \</tag\>
 
 
 ### Functions to create tags with multiple fields

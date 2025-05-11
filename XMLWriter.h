@@ -110,7 +110,7 @@ public:
   //  <tag name="name">
   void tagOpen(const char* tag, const char* name, const bool newline = true);
   //  </tag>
-  void tagClose(const bool indent = true);
+  void tagClose(const bool ind = true);
   //  <tag
   void tagStart(const char* tag);
   //   />
