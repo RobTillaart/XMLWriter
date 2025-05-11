@@ -406,7 +406,7 @@ void XMLWriter::escape(const char* str)
     p++;
   }
 }
-#endif XMLWRITER_ESCAPE_SUPPORT
+#endif
 
 
 ////////////////////////////////////////////////////////////////////
