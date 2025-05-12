@@ -348,6 +348,14 @@ void XMLWriter::writeNode(const char* tag, const bool value)
 }
 
 
+void XMLWriter::writeNode(const char* tag, const float value, const uint8_t decimals)
+{
+  tagOpen(tag, "", NONEWLINE);
+  print(value, decimals);
+  tagClose(NOINDENT);
+}
+
+
 void XMLWriter::writeNode(const char* tag, const double value, const uint8_t decimals)
 {
   tagOpen(tag, "", NONEWLINE);
