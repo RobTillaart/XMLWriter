@@ -1,6 +1,6 @@
 {
   "name": "XMLWriter",
-  "keywords": "Write, XML, node, header, tag, indent, field, stream, KML",
+  "keywords": "Write,node,header,tag,indent,field,stream,KML,GPX",
   "description": "Arduino library for creating XML. Writes to a stream, can be a file, SD, socket etc.",
   "authors":
   [
