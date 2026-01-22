@@ -216,6 +216,11 @@ can inject strings.
 
 #### Should
 
+- investigate void tagField(char field, float value, uint8_t decimals = 2); 
+  - int as decimal parameter gives compile error (ambiguous)
+  - other float functions to.
+
+
 #### Could
 
 - what can be configured? (5 bits free).
