@@ -55,7 +55,7 @@ generates KML (Keyhole Markup Language) used for geographic data.
 ### GPX
 
 GPX = GPS Exchange Format (GPX) is an XML schema designed as a common GPS data 
-format for software applications.
+format for software applications. See **GPXWriterTest.ino**.
 
 https://en.wikipedia.org/wiki/GPS_Exchange_Format
 
