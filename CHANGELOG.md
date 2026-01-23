@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - limit setIndentSize() to 0..8 (8 is a practical limited)
   - also maps negative values to 0.
 - add example GPXWriterTest.ino
+- add example XMLBloodPressure.ino
 - update GitHub actions
 - reduce build-CI time
 - update examples (print library version)

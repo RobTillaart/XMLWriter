@@ -115,9 +115,9 @@ void XMLWriter::newLine(uint8_t n)
 //
 void  XMLWriter::setIndentSize(const int size)
 {
-  _indentStep = size;
-  if (_indentStep < 0) _indentStep = 0;
-  else if (_indentStep > 8) _indentStep = 8;
+  if (size < 0) _indentStep = 0;
+  else if (size > 8) _indentStep = 8;
+  else _indentStep = size;
 };
 
 void XMLWriter::indent()
